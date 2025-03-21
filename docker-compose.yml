@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: always
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    networks:
+      - app-network
+
+  backend:
+    # Placeholder for backend service
+    # Will be properly configured when backend submodule is added
+    image: placeholder
+    restart: always
+    networks:
+      - app-network
+
+  db:
+    image: postgres:13
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      - POSTGRES_PASSWORD=changeme
+      - POSTGRES_USER=changeme
+      - POSTGRES_DB=changeme
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
