@@ -16,3 +16,11 @@ Thumbs.db
 
 # Log files
 *.log
+
+# Database folders
+database/
+backend_db/
+wordpress_db/
+
+# WordPress files
+wordpress/
